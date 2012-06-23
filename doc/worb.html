@@ -1,0 +1,119 @@
+<html><head>
+    <meta http-equiv="Content-Type" content="text/html;CHARSET=iso-8859-1">
+    <meta name="Description" content="Cat's Eye Technologies: The "noit o' mnain worb" Language">
+    <title>Cat's Eye Technologies: The "noit o' mnain worb" Language</title>
+<meta name="Keywords" content=" Cat's Eye Technologies Language
+ Programming computational computation non-deterministic
+ bobule concurrency constraint-based physics mechanics electronics
+ nondeterminstic fungeoid funge befunge experimental ">
+</head>
+<body>
+<center>
+<h1>noit o' mnain worb</h1>
+</center><p><font size=-1>Version 1.1</font> <font size=-1>&nbsp;<img src="/images/icons/copyright.gif"
+   align=absmiddle width=12 height=12 alt="(c)" border=0>2000-2004 <a href="/">Cat's Eye Technologies</a>.  All rights reserved.<br>
+    This software is OSI Certified Open Source Software.<br>
+    OSI Certified is a certification mark of the <a href="http://www.opensource.org/"><img src="/images/icons/webicon.gif" alt="[WWW]" border=0 width=12 height=12>Open Source Initiative</a>.<br>
+    See the file <a href="license.txt">license.txt</a> for license information.</font>
+<hr>
+
+<h3>What is <u>noit o' mnain worb</u>?</h3>
+
+<p>The <u>noit o' mnain worb</u> language is a
+non-deterministic particle automaton based on brownian motion (or entropy).
+
+<p>A <u>noit o' mnain worb</u> runtime has an orthogonal gridwork
+playfield (of any reasonable size or number of dimensions)
+which is populated by any number of <i>bobules</i>.  Bobules are <i>solid</i>
+elements in this grid - that is, no two bobules may occupy the same location.
+Bobules are also capable of motion - in fact they can hardly avoid it - and it is
+important to note that they are stateless.  As such, they have no idea which
+direction they are going, nor what they are going to do when they get there.</p>
+
+<p>Each time quantum, or <i>tick</i>, each bobule chooses an adjacent square
+to move to, at random (in two dimensions, that's 8 possibilities
+plus the possibility of not moving = 9 possibilities.)
+If, during some tick, this randomly-chosen new location does not allow entry -
+that is, if it is already occupied by a solid element (a bobule or a wall) - the
+bobule does not move during that tick.</p>
+
+<p>[Implementation note: each tick that a bobule is blocked from moving,
+its "pressure" increases, although this is merely for visual effect.]</p>
+
+<p>The playfield is made more interesting by the addition of:
+<ul>
+<li> <tt>#</tt> <i>walls</i> which are merely static solid elements that take up space and do not move;
+<li> <tt>^v&gt;&lt;</tt> <i>diodes</i> which disallow bobules from passing through them backwards;
+<li> <tt>+-</tt> <i>sources & sinks</i> which represent large repositories or vacancies of bobules; and
+<li> <tt>!</tt> <i>loads</i> which represent something that the bobules can 'do'.
+</ul></p>
+
+<h3>Notes</h3>
+
+<p>[Historical note: In version 1.0 (Jul 5 2000) of the language, which was released only
+on the Cat's Eye Technologies Mailing List,
+<tt>+-</tt> had much different (and much more myopic)
+semantics than they do in v1.1.]</p>
+
+<p>The sources and sinks are simply convenient 'macros', so that you can
+build something like:</p>
+
+<pre>
+  ###
+###+###
+</pre>
+
+<p>instead of saying something like:</p>
+
+<pre>
+#######
+#.....#
+#.....#
+#.....#
+###.###
+  #.#
+###v###
+</pre>
+
+<p>Using the <tt>+</tt> sources and <tt>-</tt> sinks simply saves you
+from specifying large chambers of bobules or emptiness explicitly.</p>
+
+<p>[Implementation note: It is not the intention of the <tt>+</tt> element
+to violate entropy, but the fact that, in the reference implementation, <tt>+</tt>
+keeps producing bobules indefinately at a uniform rate of 10% chance per tick
+does bend the rules a bit.  In a more "entropically correct" implementation, the
+chance per tick should decrease over time.  Note that the language proper
+does not specify any particular rate of bobule creation, but encourages
+implementations to be flexible on this point.]</p>
+
+<p>The <tt>!</tt> loads simply cause the implementation to react in some
+noticable way when a bobule enters into their location, so that the
+<u>noit o' mnain worb</u> programmer can pretend to themselves that their
+bobules are 'doing something' during program runs.</p>
+
+<p>[Implementation note: The reference interpreter simply outputs an ASCII
+BEL character when this happens.  On most terminals, this affects a beeping
+sound.]</p>
+
+<p>The idea is that the bobules, spaces, walls, and diodes alone constitute a (nearly)
+Turing-Complete system.</p>
+
+<p>I say "nearly" because it's actually missing a dimension in this form.  The
+<u>noit o' mnain worb</u> language isn't dimensionally-independent.
+Notably, it doesn't work in one dimension at all.</p>
+
+<p>It <i>almost</i> works in two dimensions, but the fact is that if you do not address
+the 'wire-crossing problem' (see <a href="/projects/befunge93/">Befunge-93</a>'s
+<tt>#</tt> instruction), you cannot
+guarantee being able to connect two arbitrarily-chosen paths in two dimensions.
+You need to have a way for coincident paths to cross, which is not strictly
+just two dimensions anymore.</p>
+
+<p>[Theoretical note: we suspect, but would surely have a hard time proving,
+that this limitation is somehow related to the four-colour map theorem.]</p>
+
+<p>So, it really only works in three dimensions and above.  For that reason,
+adding 'wormholes' to the <u>noit o' mnain worb</u> playfield is a possible
+extension in the near future, to simulate three dimensions a la 'wire crossing'.</p>
+
+</body></html>
