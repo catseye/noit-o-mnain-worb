@@ -10,7 +10,7 @@ JFLAGS?=-Xlint:deprecation -Xlint:unchecked
 CDIR=bin/tc/catseye/worb
 CLASSES=$(CDIR)/WorbState.class
 
-YOOBDIR?=../../../lab/yoob
+YOOBDIR?=../yoob
 CLASSPATH?=bin$(PATHSEP)$(YOOBDIR)/bin
 
 all: $(CLASSES)
