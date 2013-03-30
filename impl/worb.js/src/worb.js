@@ -32,15 +32,14 @@ Bobule = function() {
         var newX = this.x + (Math.floor(Math.random() * 3) - 1);
         var newY = this.y + (Math.floor(Math.random() * 3) - 1);
       
-        //alert(this.x+','+this.y);
         var e = pf.get(newX, newY);
         if (e instanceof Bobule || e instanceof Wall) {
             return;
         }
         /*
-        If e is a <>^v gate, check delta.
+        TODO If e is a <>^v gate, check delta.
         */
-        pf.del(this.x, this.y);
+        pf.put(this.x, this.y, undefined);
         this.pressure = 1;
         this.x = newX;
         this.y = newY;
@@ -48,7 +47,7 @@ Bobule = function() {
     };
 
     this.draw = function(ctx, x, y, w, h) {
-        ctx.fillStyle = "rgba(0,0," + (255-this.pressure) + ",1.0)";
+        ctx.fillStyle = "rgba(0,0," + (255-(this.pressure * 25)) + ",1.0)";
         ctx.fillRect(x, y, w, h);
     };
 };
@@ -78,12 +77,10 @@ WorbPlayfield = function() {
         return e;
     };
 
-    this.del = function(x, y) {
-        this.bobulePf.put(x, y, undefined);
-    };
-
     this.put = function(x, y, value) {
-        if (value instanceof Bobule) {
+        if (value === undefined) {
+            this.bobulePf.put(x, y, undefined);
+        } else if (value instanceof Bobule) {
             var e = this.bobulePf.get(x, y);
             if (e === undefined) {
                 this.bobulePf.put(x, y, value);
@@ -164,6 +161,12 @@ WorbPlayfield = function() {
     this.drawContext = function(ctx, offsetX, offsetY, cellWidth, cellHeight) {
         var me = this;
         this.foreach(function (x, y, elem) {
+            if (elem instanceof Bobule) {
+                if (x !== elem.x || y !== elem.y) {
+                    alert('Error: Bobule position mismatch: ' +
+                          x + ' vs ' + elem.x + ', ' + y + ' vs ' + elem.y);
+                }
+            }
             elem.draw(ctx, offsetX + x * cellWidth, offsetY + y * cellHeight,
                            cellWidth, cellHeight);
         });
@@ -177,6 +180,7 @@ NoitOMnainWorb = function() {
 
     this.step = function() {
         var pf = this.pf;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         pf.drawContext(ctx, 0, 0, 16, 16);
         pf.foreach(function (x, y, elem) {
             if (elem instanceof Bobule) {
