@@ -24,7 +24,6 @@ Bobule = function() {
         this.pressure = 1;
         this.x = x;
         this.y = y;
-        this.isBobule = true;
     };
 
     this.move = function(pf) {
@@ -33,12 +32,15 @@ Bobule = function() {
         var newX = this.x + (Math.floor(Math.random() * 3) - 1);
         var newY = this.y + (Math.floor(Math.random() * 3) - 1);
       
+        //alert(this.x+','+this.y);
         var e = pf.get(newX, newY);
+        if (e instanceof Bobule || e instanceof Wall) {
+            return;
+        }
         /*
-        If e is a bobule or a wall, continue.
         If e is a <>^v gate, check delta.
         */
-        pf.put(this.x, this.y, undefined);
+        pf.del(this.x, this.y);
         this.pressure = 1;
         this.x = newX;
         this.y = newY;
@@ -46,8 +48,8 @@ Bobule = function() {
     };
 
     this.draw = function(ctx, x, y, w, h) {
-        ctx.fillStyle = "blue";
-        ctx.fillRect(x, y, w, h);        
+        ctx.fillStyle = "rgba(0,0," + (255-this.pressure) + ",1.0)";
+        ctx.fillRect(x, y, w, h);
     };
 };
 
@@ -76,8 +78,12 @@ WorbPlayfield = function() {
         return e;
     };
 
+    this.del = function(x, y) {
+        this.bobulePf.put(x, y, undefined);
+    };
+
     this.put = function(x, y, value) {
-        if (value !== undefined && value.isBobule) {
+        if (value instanceof Bobule) {
             var e = this.bobulePf.get(x, y);
             if (e === undefined) {
                 this.bobulePf.put(x, y, value);
@@ -116,7 +122,9 @@ WorbPlayfield = function() {
             } else if (c === '\r') {
             } else {
                 if (c === '.') {
-                    this.put(lx, ly, new Bobule(lx, ly));
+                    var b = new Bobule();
+                    b.init(lx, ly);
+                    this.put(lx, ly, b);
                 } else if (c === '#') {
                     this.put(lx, ly, new Wall());
                 }
@@ -171,9 +179,7 @@ NoitOMnainWorb = function() {
         var pf = this.pf;
         pf.drawContext(ctx, 0, 0, 16, 16);
         pf.foreach(function (x, y, elem) {
-            // not sure why this isn't working.
-            // js oo \o/
-            if (elem.isBobule) {
+            if (elem instanceof Bobule) {
                 elem.move(pf);
             }
         });
