@@ -17,7 +17,7 @@ Bobule = function() {
         if (e instanceof Bobule || e instanceof Wall) {
             return;
         }
-        if (e instanceof Gate) {
+        if (e instanceof Diode) {
             var dx = e.dx;
             var dy = e.dy;
             if (dx === -1 && newX > x) return;
@@ -43,7 +43,7 @@ Wall = function() {
     };
 };
 
-Gate = function() {
+Diode = function() {
     this.init = function(dx, dy) {
         this.dx = dx;
         this.dy = dy;
@@ -51,8 +51,28 @@ Gate = function() {
 
     this.draw = function(ctx, x, y, w, h) {
         ctx.fillStyle = "yellow";
-        // TODO dx, dy -> arrow
         ctx.fillRect(x, y, w, h);
+        ctx.beginPath();
+        ctx.fillStyle = "orange";
+        if (this.dx === 0 && this.dy === -1) {
+            ctx.lineTo(x + (w*0.25), y + (h*0.75));
+            ctx.lineTo(x + (w/2), y + (h*0.25));
+            ctx.lineTo(x + (w*0.75), y + (h*0.75));
+        } else if (this.dx === 0 && this.dy === 1) {
+            ctx.lineTo(x + (w*0.25), y + (h*0.25));
+            ctx.lineTo(x + (w/2), y + (h*0.75));
+            ctx.lineTo(x + (w*0.75), y + (h*0.25));
+        } else if (this.dx === 1 && this.dy === 0) {
+            ctx.lineTo(x + (w*0.25), y + (h*0.25));
+            ctx.lineTo(x + (w*0.75), y + (h*0.50));
+            ctx.lineTo(x + (w*0.25), y + (h*0.75));
+        } else if (this.dx === -1 && this.dy === 0) {
+            ctx.lineTo(x + (w*0.75), y + (h*0.25));
+            ctx.lineTo(x + (w*0.25), y + (h*0.50));
+            ctx.lineTo(x + (w*0.75), y + (h*0.75));
+        }
+        ctx.closePath();
+        ctx.fill();
     };
 };
 
@@ -144,19 +164,19 @@ WorbPlayfield = function() {
                 } else if (c === '!') {
                     this.put(lx, ly, new Load());
                 } else if (c === '>' || c === ')') {
-                    var g = new Gate();
+                    var g = new Diode();
                     g.init(1, 0);
                     this.put(lx, ly, g);
                 } else if (c === '<' || c === '(') {
-                    var g = new Gate();
+                    var g = new Diode();
                     g.init(-1, 0);
                     this.put(lx, ly, g);
                 } else if (c === '^') {
-                    var g = new Gate();
+                    var g = new Diode();
                     g.init(0, -1);
                     this.put(lx, ly, g);
                 } else if (c === 'v') {
-                    var g = new Gate();
+                    var g = new Diode();
                     g.init(0, 1);
                     this.put(lx, ly, g);
                 }

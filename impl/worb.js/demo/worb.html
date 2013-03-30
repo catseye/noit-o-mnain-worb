@@ -28,8 +28,13 @@
         <option>freefill</option>
         <option>magnetic_field</option>
         <option>theory_of_time</option>
+        <option>slow_loop</option>
         <option>fast_loop</option>
         <option>pressure</option>
+        <option>transistor</option>
+        <option>or_gate</option>
+        <option>subtraction</option>
+        <option>division</option>
       </select>
     </span>
   </span>
@@ -74,6 +79,18 @@
 ######################
 </div>
 
+<div class="initial_configuration" id="slow_loop"
+>#####################
+#        (          #
+# ################# #
+# #               # #
+# #               #.#
+# #               # #
+# ################# #
+#         )         #
+#####################
+</div>
+
 <div class="initial_configuration" id="fast_loop"
 >#######
 # ( ( #
@@ -101,6 +118,55 @@
 >#######################
 #..........)          #
 #######################
+</div>
+
+<div class="initial_configuration" id="transistor"
+>        ###
+###     #+#
+#+#     # #
+# #######v#
+#       ( #
+###     ( #
+  #     ( #
+  #######v#
+        # #
+        #!#
+        #-#
+        ###
+</div>
+
+<div class="initial_configuration" id="or_gate"
+>#####         #####
+#   ###########   #
+# . )         ( . #
+#   #####v#####   #
+#####   #  ########
+        #       )!#
+        #v#########
+        # #
+        ###
+</div>
+
+<div class="initial_configuration" id="subtraction"
+>###############
+#.............#
+#######v#######
+      #       #
+      #########
+</div>
+
+<div class="initial_configuration" id="division"
+>############
+#..........#
+#######v####
+      #    #
+      #v####
+      #    #
+      #v####
+      #    #
+      #v####
+      #    #
+      ######
 </div>
 
 </body>

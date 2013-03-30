@@ -1,4 +1,3 @@
-* draw arrows on gates
 * implement something for load (sound? callback?)
-* more example sources
 * speed control
+* convert ( and ) to < and > after copying init cfg into textarea
