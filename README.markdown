@@ -1,8 +1,27 @@
 noit o' mnain worb
 ==================
 
-Language version 1.1. Distribution version 2010.0721.  
-Copyright ©2000-2010, Cat's Eye Technologies. All rights reserved.
+Language version 1.1. Distribution version 2013.0330.  
+Copyright ©2000-2013, Chris Pressey, Cat's Eye Technologies.  
+All rights reserved.
+
+What is this?
+-------------
+
+This is the reference distribution of *noit o' mnain worb*, a
+probabilistic particle automaton described (awkwardly) in the next
+section.
+
+It contains the reference implementation, as a Perl script which
+uses the (included) Console::Virtual library, in the `script`
+directory.
+
+It also contains an implementation in Javascript/HTML5, using
+modules (also included) from yoob.js, in the `impl/worb.js`
+directory.
+
+It also contains an implementation in Java, using the yoob
+framework (not included), in the `src` directory.
 
 What is noit o' mnain worb?
 ---------------------------

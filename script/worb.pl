@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/env perl
 
 # noit o' mnain worb - fungeoid language based on brownian motion
 # v2007.1123 Chris Pressey, Cat's Eye Technologies
