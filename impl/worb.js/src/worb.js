@@ -26,18 +26,28 @@ program =
             "#######\n";
 
 
-Bobule = function() {
-    this.init = function(x, y) {
-        this.pressure = 1;
-        this.x = x;
-        this.y = y;
-    };
+program =
+            "######################\n" +
+            "#        -------     #\n" +
+            "#        -------     #\n" +
+            "#        -------     #\n" +
+            "#        -------     #\n" +
+            "#        -------     #\n" +
+            "#        +++         #\n" +
+            "#        +++         #\n" +
+            "#                    #\n" +
+            "#                    #\n" +
+            "#                    #\n" +
+            "######################\n";
 
-    this.move = function(pf) {
+Bobule = function() {
+    this.pressure = 1;
+
+    this.move = function(pf, x, y) {
         this.pressure++;
   
-        var newX = this.x + (Math.floor(Math.random() * 3) - 1);
-        var newY = this.y + (Math.floor(Math.random() * 3) - 1);
+        var newX = x + (Math.floor(Math.random() * 3) - 1);
+        var newY = y + (Math.floor(Math.random() * 3) - 1);
       
         var e = pf.get(newX, newY);
         if (e instanceof Bobule || e instanceof Wall) {
@@ -46,16 +56,14 @@ Bobule = function() {
         if (e instanceof Gate) {
             var dx = e.dx;
             var dy = e.dy;
-            if (dx === -1 && newX > this.x) return;
-            if (dx === 1 && newX < this.x) return;
-            if (dy === -1 && newY > this.y) return;
-            if (dy === 1 && newY < this.y) return;
+            if (dx === -1 && newX > x) return;
+            if (dx === 1 && newX < x) return;
+            if (dy === -1 && newY > y) return;
+            if (dy === 1 && newY < y) return;
         }
-        pf.put(this.x, this.y, undefined);
+        pf.put(x, y, undefined);
         this.pressure = 1;
-        this.x = newX;
-        this.y = newY;
-        pf.put(this.x, this.y, this);
+        pf.put(newX, newY, this);
     };
 
     this.draw = function(ctx, x, y, w, h) {
@@ -66,7 +74,7 @@ Bobule = function() {
 
 Wall = function() {
     this.draw = function(ctx, x, y, w, h) {
-        ctx.fillStyle = "red";
+        ctx.fillStyle = "brown";
         ctx.fillRect(x, y, w, h);
     };
 };
@@ -80,6 +88,20 @@ Gate = function() {
     this.draw = function(ctx, x, y, w, h) {
         ctx.fillStyle = "yellow";
         // TODO dx, dy -> arrow
+        ctx.fillRect(x, y, w, h);
+    };
+};
+
+Source = function() {
+    this.draw = function(ctx, x, y, w, h) {
+        ctx.fillStyle = "green";
+        ctx.fillRect(x, y, w, h);
+    };
+};
+
+Sink = function() {
+    this.draw = function(ctx, x, y, w, h) {
+        ctx.fillStyle = "red";
         ctx.fillRect(x, y, w, h);
     };
 };
@@ -141,11 +163,13 @@ WorbPlayfield = function() {
             } else if (c === '\r') {
             } else {
                 if (c === '.') {
-                    var b = new Bobule();
-                    b.init(lx, ly);
-                    this.put(lx, ly, b);
+                    this.put(lx, ly, new Bobule());
                 } else if (c === '#') {
                     this.put(lx, ly, new Wall());
+                } else if (c === '+') {
+                    this.put(lx, ly, new Source());
+                } else if (c === '-') {
+                    this.put(lx, ly, new Sink());
                 } else if (c === '>') {
                     var g = new Gate();
                     g.init(1, 0);
@@ -171,7 +195,7 @@ WorbPlayfield = function() {
     /*
      * Iterate over every defined cell in the Playfield.
      * fun is a callback which takes three parameters:
-     * x, y, and value.  If this callback returns a value,
+     * x, y, value.  If this callback returns a value,
      * it is written into the Playfield at that position.
      * This function ensures a particular order.
      */
@@ -192,6 +216,14 @@ WorbPlayfield = function() {
         }
     };
 
+    this.foreachBobule = function(fun) {
+        this.bobulePf.foreach(fun);
+    };
+
+    this.foreachWorld = function(fun) {
+        this.worldPf.foreach(fun);
+    };
+
     /*
      * Draws the Playfield in a drawing context.
      * cellWidth and cellHeight are canvas units of measure for each cell.
@@ -199,12 +231,6 @@ WorbPlayfield = function() {
     this.drawContext = function(ctx, offsetX, offsetY, cellWidth, cellHeight) {
         var me = this;
         this.foreach(function (x, y, elem) {
-            if (elem instanceof Bobule) {
-                if (x !== elem.x || y !== elem.y) {
-                    alert('Error: Bobule position mismatch: ' +
-                          x + ' vs ' + elem.x + ', ' + y + ' vs ' + elem.y);
-                }
-            }
             elem.draw(ctx, offsetX + x * cellWidth, offsetY + y * cellHeight,
                            cellWidth, cellHeight);
         });
@@ -220,9 +246,21 @@ NoitOMnainWorb = function() {
         var pf = this.pf;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         pf.drawContext(ctx, 0, 0, 16, 16);
-        pf.foreach(function (x, y, elem) {
-            if (elem instanceof Bobule) {
-                elem.move(pf);
+        pf.foreachBobule(function (x, y, elem) {
+            elem.move(pf, x, y);
+        });
+        pf.foreachWorld(function (x, y, elem) {
+            var b;
+            if (elem instanceof Sink) {
+                b = pf.get(x, y);
+                if (b instanceof Bobule && Math.random() <= 0.10) {
+                    pf.put(x, y, undefined);
+                }
+            } else if (elem instanceof Source) {
+                b = pf.get(x, y);
+                if (!(b instanceof Bobule) && Math.random() <= 0.10) {
+                    pf.put(x, y, new Bobule());
+                }
             }
         });
     };
