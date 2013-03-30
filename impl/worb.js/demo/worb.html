@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <title>noit o' mnain worb</title>
+</head>
+<body>
+
+<h1>noit o' mnain worb</h1>
+
+<canvas id="canvas" width="400" height="400">
+  Your browser doesn't support displaying an HTML5 canvas.
+</canvas>
+
+</body>
+<script src="../src/yoob/playfield.js"></script>
+<script src="../src/worb.js"></script>
+<script>
+  var canvas = document.getElementById('canvas');
+  var worb = new NoitOMnainWorb();
+  worb.init(canvas);
+</script>
