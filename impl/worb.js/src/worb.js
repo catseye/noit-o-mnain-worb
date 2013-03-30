@@ -18,6 +18,13 @@ var program =
   "#..........          #\n" +
   "######################\n";
 
+program =
+            "#######\n" +
+            "# < < #\n" +
+            "#v###^#\n" +
+            "# >.> #\n" +
+            "#######\n";
+
 
 Bobule = function() {
     this.init = function(x, y) {
@@ -36,9 +43,14 @@ Bobule = function() {
         if (e instanceof Bobule || e instanceof Wall) {
             return;
         }
-        /*
-        TODO If e is a <>^v gate, check delta.
-        */
+        if (e instanceof Gate) {
+            var dx = e.dx;
+            var dy = e.dy;
+            if (dx === -1 && newX > this.x) return;
+            if (dx === 1 && newX < this.x) return;
+            if (dy === -1 && newY > this.y) return;
+            if (dy === 1 && newY < this.y) return;
+        }
         pf.put(this.x, this.y, undefined);
         this.pressure = 1;
         this.x = newX;
@@ -53,11 +65,21 @@ Bobule = function() {
 };
 
 Wall = function() {
-    this.init = function(x, y) {
+    this.draw = function(ctx, x, y, w, h) {
+        ctx.fillStyle = "red";
+        ctx.fillRect(x, y, w, h);
+    };
+};
+
+Gate = function() {
+    this.init = function(dx, dy) {
+        this.dx = dx;
+        this.dy = dy;
     };
 
     this.draw = function(ctx, x, y, w, h) {
-        ctx.fillStyle = "red";
+        ctx.fillStyle = "yellow";
+        // TODO dx, dy -> arrow
         ctx.fillRect(x, y, w, h);
     };
 };
@@ -124,6 +146,22 @@ WorbPlayfield = function() {
                     this.put(lx, ly, b);
                 } else if (c === '#') {
                     this.put(lx, ly, new Wall());
+                } else if (c === '>') {
+                    var g = new Gate();
+                    g.init(1, 0);
+                    this.put(lx, ly, g);
+                } else if (c === '<') {
+                    var g = new Gate();
+                    g.init(-1, 0);
+                    this.put(lx, ly, g);
+                } else if (c === '^') {
+                    var g = new Gate();
+                    g.init(0, -1);
+                    this.put(lx, ly, g);
+                } else if (c === 'v') {
+                    var g = new Gate();
+                    g.init(0, 1);
+                    this.put(lx, ly, g);
                 }
                 lx++;
             }
