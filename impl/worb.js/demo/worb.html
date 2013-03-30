@@ -8,6 +8,7 @@
     width: 420px; height: 420px; overflow: scroll; border: 1px solid black;
     display: inline-block;
 }
+# load_indicator { border: 1px solid purple; }
 .initial_configuration { display: none; }
   </style>
 </head>
@@ -35,8 +36,12 @@
         <option>or_gate</option>
         <option>subtraction</option>
         <option>division</option>
+        <option>heater</option>
       </select>
     </span>
+  </span>
+  <span id="load_indicator">
+    load indicator
   </span>
 </div>
 
@@ -169,15 +174,37 @@
       ######
 </div>
 
+<div class="initial_configuration" id="heater"
+>     #########
+     #! ! ! !#
+###### ! ! ! ######
+#+    ! ! ! !    -#
+###### ! ! ! ######
+     #! ! ! !#
+     #########
+</div>
+
 </body>
 <script src="../src/yoob/playfield.js"></script>
 <script src="../src/worb.js"></script>
 <script>
   var canvas = document.getElementById('canvas');
+  var cfg = document.getElementById('configuration');
+  var loadIndicator = document.getElementById('load_indicator');
+
   var worb = new NoitOMnainWorb();
+  var loadLevel = 0;
+
   worb.init(canvas);
+  worb.onstep = function(underLoad) {
+      if (underLoad) loadLevel += 60;
+      loadLevel -= 10;
+      if (loadLevel < 0) loadLevel = 0;
+      if (loadLevel > 255) loadLevel = 255;
+      var l = 255-loadLevel;
+      loadIndicator.style.background = "rgba(255, " + l + "," + l + ",1.0)";
+  };
   document.getElementById('load').onclick = function() {
-      var cfg = document.getElementById('configuration');
       worb.load(cfg);
   };
   document.getElementById('start').onclick = function() {
@@ -187,9 +214,11 @@
       worb.stop();
   };
   document.getElementById('select_configuration').onchange = function() {
-      var cfg = document.getElementById('configuration');
       var initcfg = document.getElementById(this.options[this.selectedIndex].value);
-      cfg.value = initcfg.innerHTML;
+      var text = initcfg.innerHTML;
+      text = text.replace(/\(/g, '<');
+      text = text.replace(/\)/g, '>');
+      cfg.value = text;
       worb.load(cfg);
   };
 </script>

@@ -163,11 +163,11 @@ WorbPlayfield = function() {
                     this.put(lx, ly, new Sink());
                 } else if (c === '!') {
                     this.put(lx, ly, new Load());
-                } else if (c === '>' || c === ')') {
+                } else if (c === '>') {
                     var g = new Diode();
                     g.init(1, 0);
                     this.put(lx, ly, g);
-                } else if (c === '<' || c === '(') {
+                } else if (c === '<') {
                     var g = new Diode();
                     g.init(-1, 0);
                     this.put(lx, ly, g);
@@ -247,6 +247,7 @@ NoitOMnainWorb = function() {
     };
 
     this.step = function() {
+        var underLoad = false;
         var pf = this.pf;
         this.draw();
         pf.foreachBobule(function (x, y, elem) {
@@ -264,8 +265,16 @@ NoitOMnainWorb = function() {
                 if (!(b instanceof Bobule) && Math.random() <= 0.10) {
                     pf.put(x, y, new Bobule());
                 }
+            } else if (elem instanceof Load) {
+                b = pf.get(x, y);
+                if (b instanceof Bobule) {
+                    underLoad = true;
+                }
             }
         });
+        if (this.onstep !== undefined) {
+            this.onstep(underLoad);
+        }
     };
 
     this.start = function() {
