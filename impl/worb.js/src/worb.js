@@ -2,43 +2,7 @@
  * requires yoob.Playfield
  */
 
-/* Incomplete implementation of noit o' mnain worb w/yoob.js */
-
-var program =
-  "######################\n" +
-  "#..........          #\n" +
-  "#..........          #\n" +
-  "#..........          #\n" +
-  "#..........          #\n" +
-  "#..........          #\n" +
-  "#..........          #\n" +
-  "#..........          #\n" +
-  "#..........          #\n" +
-  "#..........          #\n" +
-  "#..........          #\n" +
-  "######################\n";
-
-program =
-            "#######\n" +
-            "# < < #\n" +
-            "#v###^#\n" +
-            "# >.> #\n" +
-            "#######\n";
-
-
-program =
-            "######################\n" +
-            "#        -------     #\n" +
-            "#        -------     #\n" +
-            "#        -------     #\n" +
-            "#        -------     #\n" +
-            "#        -------     #\n" +
-            "#        +++         #\n" +
-            "#        +++         #\n" +
-            "#                    #\n" +
-            "#                    #\n" +
-            "#                    #\n" +
-            "######################\n";
+/* An implementation of noit o' mnain worb, using yoob.js */
 
 Bobule = function() {
     this.pressure = 1;
@@ -102,6 +66,13 @@ Source = function() {
 Sink = function() {
     this.draw = function(ctx, x, y, w, h) {
         ctx.fillStyle = "red";
+        ctx.fillRect(x, y, w, h);
+    };
+};
+
+Load = function() {
+    this.draw = function(ctx, x, y, w, h) {
+        ctx.fillStyle = "cyan";
         ctx.fillRect(x, y, w, h);
     };
 };
@@ -170,11 +141,13 @@ WorbPlayfield = function() {
                     this.put(lx, ly, new Source());
                 } else if (c === '-') {
                     this.put(lx, ly, new Sink());
-                } else if (c === '>') {
+                } else if (c === '!') {
+                    this.put(lx, ly, new Load());
+                } else if (c === '>' || c === ')') {
                     var g = new Gate();
                     g.init(1, 0);
                     this.put(lx, ly, g);
-                } else if (c === '<') {
+                } else if (c === '<' || c === '(') {
                     var g = new Gate();
                     g.init(-1, 0);
                     this.put(lx, ly, g);
@@ -239,13 +212,23 @@ WorbPlayfield = function() {
 
 
 NoitOMnainWorb = function() {
+    var canvas;
     var ctx;
     var intervalId = undefined;
+    var cellWidth = 16;
+    var cellHeight = 16;
+
+    this.draw = function() {
+        canvas.width = (this.pf.worldPf.max_x - this.pf.worldPf.min_x + 1) * cellWidth;
+        canvas.height = (this.pf.worldPf.max_y - this.pf.worldPf.min_y + 1) * cellHeight;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        this.pf.drawContext(ctx, 0, 0, cellWidth, cellHeight);
+    };
 
     this.step = function() {
         var pf = this.pf;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        pf.drawContext(ctx, 0, 0, 16, 16);
+        this.draw();
         pf.foreachBobule(function (x, y, elem) {
             elem.move(pf, x, y);
         });
@@ -270,20 +253,26 @@ NoitOMnainWorb = function() {
             return;
         this.step();
         var self = this;
-        interval_id = setInterval(function() { self.step(); }, 100);
-    }
+        intervalId = setInterval(function() { self.step(); }, 100);
+    };
 
     this.stop = function() {
         if (intervalId === undefined)
             return;
         clearInterval(intervalId);
         intervalId = undefined;
-    }
+    };
 
-    this.init = function(canvas) {
+    this.load = function(textarea) {
+        this.stop();
+        this.pf.clear();
+        this.pf.load(0, 0, textarea.value);
+        this.draw();
+    };
+
+    this.init = function(c) {
+        canvas = c;
         ctx = canvas.getContext('2d');
         this.pf = new WorbPlayfield();
-        this.pf.load(0, 0, program);
-        this.start();
     };
 };
