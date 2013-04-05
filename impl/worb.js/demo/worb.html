@@ -14,11 +14,14 @@
 </head>
 <body>
 
-<h1>noit o' mnain worb
+<h1>noit o' mnain worb</h1>
+
 <button id="load">Load</button>
+<button id="edit">Edit</button>
 <button id="start">Start</button>
 <button id="stop">Stop</button>
-</h1>
+<button id="step">Step</button>
+Speed: <input id="speed" type="range" min="0" max="200" value="0" />
 
 <div>
   <span class="control-container">
@@ -185,6 +188,7 @@
 </div>
 
 </body>
+<script src="../src/yoob/controller.js"></script>
 <script src="../src/yoob/playfield.js"></script>
 <script src="../src/worb.js"></script>
 <script>
@@ -192,10 +196,22 @@
   var cfg = document.getElementById('configuration');
   var loadIndicator = document.getElementById('load_indicator');
 
-  var worb = new NoitOMnainWorb();
-  var loadLevel = 0;
-
+  var worb = new WorbController();
   worb.init(canvas);
+  worb.connect({
+    'start': 'start',
+    'stop': 'stop',
+    'step': 'step',
+    'load': 'load',
+    'edit': 'edit',
+    'source': cfg,
+    'display': 'canvas_viewport',
+    'speed': 'speed'
+  });
+  worb.click_load();
+
+  /*
+  var loadLevel = 0;
   worb.onstep = function(underLoad) {
       if (underLoad) loadLevel += 60;
       loadLevel -= 10;
@@ -204,21 +220,15 @@
       var l = 255-loadLevel;
       loadIndicator.style.background = "rgba(255, " + l + "," + l + ",1.0)";
   };
-  document.getElementById('load').onclick = function() {
-      worb.load(cfg);
-  };
-  document.getElementById('start').onclick = function() {
-      worb.start();
-  };
-  document.getElementById('stop').onclick = function() {
-      worb.stop();
-  };
+  */
+
   document.getElementById('select_configuration').onchange = function() {
+      worb.stop();
       var initcfg = document.getElementById(this.options[this.selectedIndex].value);
       var text = initcfg.innerHTML;
       text = text.replace(/\(/g, '<');
       text = text.replace(/\)/g, '>');
       cfg.value = text;
-      worb.load(cfg);
+      worb.load(text);
   };
 </script>

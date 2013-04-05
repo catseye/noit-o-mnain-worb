@@ -1,10 +1,12 @@
 /*
  * worb.js -- An implementation of noit o' mnain worb, using yoob.js
- * requires yoob.Playfield to be sourced before this file
+ * requires the following classes to be sourced before this file:
+ * yoob.Controller
+ * yoob.Playfield
  */
 
 /*
- * Copyright (c)2011-2013, Chris Pressey, Cat's Eye Technologies.
+ * Copyright (c)2013, Chris Pressey, Cat's Eye Technologies.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -225,8 +227,9 @@ WorbPlayfield = function() {
      * This function ensures a particular order.
      */
     this.foreach = function(fun) {
-        for (var y = this.worldPf.min_y; y <= this.worldPf.max_y; y++) {
-            for (var x = this.worldPf.min_x; x <= this.worldPf.max_x; x++) {
+        /* TODO have less knowledge of the innards of yoob.Playfield */
+        for (var y = this.worldPf.minY; y <= this.worldPf.maxY; y++) {
+            for (var x = this.worldPf.minX; x <= this.worldPf.maxX; x++) {
                 var value = this.get(x, y);
                 if (value === undefined)
                     continue;
@@ -255,16 +258,15 @@ WorbPlayfield = function() {
     };
 };
 
-NoitOMnainWorb = function() {
+WorbController = function() {
     var canvas;
     var ctx;
-    var intervalId = undefined;
     var cellWidth = 16;
     var cellHeight = 16;
 
     this.draw = function() {
-        canvas.width = (this.pf.worldPf.max_x - this.pf.worldPf.min_x + 1) * cellWidth;
-        canvas.height = (this.pf.worldPf.max_y - this.pf.worldPf.min_y + 1) * cellHeight;
+        canvas.width = this.pf.worldPf.getExtentX() * cellWidth;
+        canvas.height = this.pf.worldPf.getExtentY() * cellHeight;
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         this.pf.drawContext(ctx, 0, 0, cellWidth, cellHeight);
@@ -301,25 +303,9 @@ NoitOMnainWorb = function() {
         }
     };
 
-    this.start = function() {
-        if (intervalId !== undefined)
-            return;
-        this.step();
-        var self = this;
-        intervalId = setInterval(function() { self.step(); }, 100);
-    };
-
-    this.stop = function() {
-        if (intervalId === undefined)
-            return;
-        clearInterval(intervalId);
-        intervalId = undefined;
-    };
-
-    this.load = function(textarea) {
-        this.stop();
+    this.load = function(text) {
         this.pf.clear();
-        this.pf.load(0, 0, textarea.value);
+        this.pf.load(0, 0, text);
         this.draw();
     };
 
@@ -329,3 +315,4 @@ NoitOMnainWorb = function() {
         this.pf = new WorbPlayfield();
     };
 };
+WorbController.prototype = new yoob.Controller();
