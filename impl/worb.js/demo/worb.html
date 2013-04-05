@@ -9,7 +9,6 @@
     display: inline-block;
 }
 # load_indicator { border: 1px solid purple; }
-.initial_configuration { display: none; }
   </style>
 </head>
 <body>
@@ -26,20 +25,20 @@ Speed: <input id="speed" type="range" min="0" max="200" value="0" />
 <div>
   <span class="control-container">
     configuration:
-    <span id="select_configuration_div">
-      <select id="select_configuration">
+    <span id="select_source_container">
+      <select id="select_source">
         <option>(select one...)</option>
-        <option>freefill</option>
-        <option>magnetic_field</option>
-        <option>theory_of_time</option>
-        <option>slow_loop</option>
-        <option>fast_loop</option>
-        <option>pressure</option>
-        <option>transistor</option>
-        <option>or_gate</option>
-        <option>subtraction</option>
         <option>division</option>
+        <option>fast-loop</option>
+        <option>freefill</option>
         <option>heater</option>
+        <option>magnetic-field</option>
+        <option>or-gate</option>
+        <option>pressure</option>
+        <option>slow-loop</option>
+        <option>subtraction</option>
+        <option>theory-of-time</option>
+        <option>transistor</option>
       </select>
     </span>
   </span>
@@ -57,7 +56,31 @@ Speed: <input id="speed" type="range" min="0" max="200" value="0" />
 <textarea id="configuration" rows="25" cols="40">
 </textarea>
 
-<div class="initial_configuration" id="freefill"
+<div id="division" style="display: none;"
+>############
+#..........#
+#######v####
+      #    #
+      #v####
+      #    #
+      #v####
+      #    #
+      #v####
+      #    #
+      ######
+</div>
+
+
+<div id="fast-loop" style="display: none;"
+>#######
+# &lt; &lt; #
+# ### #
+# &gt;.&gt; #
+#######
+</div>
+
+
+<div id="freefill" style="display: none;"
 >######################
 #                    #
 #                    #
@@ -72,112 +95,8 @@ Speed: <input id="speed" type="range" min="0" max="200" value="0" />
 ######################
 </div>
 
-<div class="initial_configuration" id="theory_of_time"
->######################
-#..........          #
-#..........          #
-#..........          #
-#..........          #
-#..........          #
-#..........          #
-#..........          #
-#..........          #
-#..........          #
-#..........          #
-######################
-</div>
 
-<div class="initial_configuration" id="slow_loop"
->#####################
-#        (          #
-# ################# #
-# #               # #
-# #               #.#
-# #               # #
-# ################# #
-#         )         #
-#####################
-</div>
-
-<div class="initial_configuration" id="fast_loop"
->#######
-# ( ( #
-#v###^#
-# ).) #
-#######
-</div>
-
-<div class="initial_configuration" id="magnetic_field"
->######################
-#                    #
-#                    #
-#                    #
-#        ---         #
-#        ---         #
-#        +++         #
-#        +++         #
-#                    #
-#                    #
-#                    #
-######################
-</div>
-
-<div class="initial_configuration" id="pressure"
->#######################
-#..........)          #
-#######################
-</div>
-
-<div class="initial_configuration" id="transistor"
->        ###
-###     #+#
-#+#     # #
-# #######v#
-#       ( #
-###     ( #
-  #     ( #
-  #######v#
-        # #
-        #!#
-        #-#
-        ###
-</div>
-
-<div class="initial_configuration" id="or_gate"
->#####         #####
-#   ###########   #
-# . )         ( . #
-#   #####v#####   #
-#####   #  ########
-        #       )!#
-        #v#########
-        # #
-        ###
-</div>
-
-<div class="initial_configuration" id="subtraction"
->###############
-#.............#
-#######v#######
-      #       #
-      #########
-</div>
-
-<div class="initial_configuration" id="division"
->############
-#..........#
-#######v####
-      #    #
-      #v####
-      #    #
-      #v####
-      #    #
-      #v####
-      #    #
-      ######
-</div>
-
-<div class="initial_configuration" id="heater"
+<div id="heater" style="display: none;"
 >     #########
      #! ! ! !#
 ###### ! ! ! ######
@@ -186,6 +105,96 @@ Speed: <input id="speed" type="range" min="0" max="200" value="0" />
      #! ! ! !#
      #########
 </div>
+
+
+<div id="magnetic-field" style="display: none;"
+>######################
+#                    #
+#                    #
+#                    #
+#        ---         #
+#        ---         #
+#        +++         #
+#        +++         #
+#                    #
+#                    #
+#                    #
+######################</div>
+
+
+<div id="or-gate" style="display: none;"
+>#####         #####
+#   ###########   #
+# . &gt;         &lt; . #
+#   #####v#####   #
+#####   #  ########
+        #       &gt;!#
+        #v#########
+        # #
+        ###
+</div>
+
+
+<div id="pressure" style="display: none;"
+>#######################
+#..........&gt;          #
+#######################
+</div>
+
+
+<div id="slow-loop" style="display: none;"
+>#####################
+#        &lt;          #
+# ################# #
+# #               # #
+# #               #.#
+# #               # #
+# ################# #
+#         &gt;         #
+#####################
+</div>
+
+
+<div id="subtraction" style="display: none;"
+>###############
+#.............#
+#######v#######
+      #       #
+      #########
+
+</div>
+
+
+<div id="theory-of-time" style="display: none;"
+>######################
+#..........          #
+#..........          #
+#..........          #
+#..........          #
+#..........          #
+#..........          #
+#..........          #
+#..........          #
+#..........          #
+#..........          #
+######################
+</div>
+
+
+<div id="transistor" style="display: none;"
+>        ###
+###     #+#
+#+#     # #
+# #######v#
+#       &lt; #
+###     &lt; #
+  #     &lt; #
+  #######v#
+        # #
+        #!#
+        #-#
+        ###</div>
+
 
 </body>
 <script src="../src/yoob/controller.js"></script>
@@ -220,12 +229,13 @@ Speed: <input id="speed" type="range" min="0" max="200" value="0" />
       loadIndicator.style.background = "rgba(255, " + l + "," + l + ",1.0)";
   };
 
-  document.getElementById('select_configuration').onchange = function() {
+  document.getElementById('select_source').onchange = function() {
       worb.stop();
       var initcfg = document.getElementById(this.options[this.selectedIndex].value);
       var text = initcfg.innerHTML;
-      text = text.replace(/\(/g, '<');
-      text = text.replace(/\)/g, '>');
+      text = text.replace(/\&lt;/g, '<');
+      text = text.replace(/\&gt;/g, '>');
+      text = text.replace(/\&amp;/g, '&');
       cfg.value = text;
       worb.load(text);
   };
