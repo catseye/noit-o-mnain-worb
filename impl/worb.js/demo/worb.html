@@ -210,7 +210,6 @@ Speed: <input id="speed" type="range" min="0" max="200" value="0" />
   });
   worb.click_load();
 
-  /*
   var loadLevel = 0;
   worb.onstep = function(underLoad) {
       if (underLoad) loadLevel += 60;
@@ -220,7 +219,6 @@ Speed: <input id="speed" type="range" min="0" max="200" value="0" />
       var l = 255-loadLevel;
       loadIndicator.style.background = "rgba(255, " + l + "," + l + ",1.0)";
   };
-  */
 
   document.getElementById('select_configuration').onchange = function() {
       worb.stop();
