@@ -17,11 +17,12 @@ uses the (included) Console::Virtual library, in the `script`
 directory.
 
 It also contains an implementation in Javascript/HTML5, using
-modules (also included) from yoob.js, in the `impl/worb.js`
-directory.
+modules (also included) from [yoob.js](https://github.com/catseye/yoob.js),
+in the `impl/worb.js` directory.
 
-It also contains an implementation in Java, using the yoob
-framework (not included), in the `src` directory.
+It used to contain, but no longer contains, an implementation in Java.
+This implementation can now be found in
+[the yoob distribution](https://github.com/catseye/yoob).
 
 What is noit o' mnain worb?
 ---------------------------
