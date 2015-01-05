@@ -9,6 +9,7 @@
     display: inline-block;
 }
 #load_indicator { border: 1px solid purple; }
+.example_configuration { display: none; }
   </style>
 </head>
 <body>
@@ -20,28 +21,11 @@
 <button id="start">Start</button>
 <button id="stop">Stop</button>
 <button id="step">Step</button>
+<button id="reset">Reset</button>
 Speed: <input id="speed" type="range" min="0" max="200" value="0" />
 
 <div>
-  <span class="control-container">
-    configuration:
-    <span id="select_source_container">
-      <select id="select_source">
-        <option>(select one...)</option>
-        <option>division</option>
-        <option>fast-loop</option>
-        <option>freefill</option>
-        <option>heater</option>
-        <option>magnetic-field</option>
-        <option>or-gate</option>
-        <option>pressure</option>
-        <option>slow-loop</option>
-        <option>subtraction</option>
-        <option>theory-of-time</option>
-        <option>transistor</option>
-      </select>
-    </span>
-  </span>
+  configuration: <select id="select_source"></select>
   <span id="load_indicator">
     load indicator
   </span>
@@ -56,7 +40,7 @@ Speed: <input id="speed" type="range" min="0" max="200" value="0" />
 <textarea id="configuration" rows="25" cols="40">
 </textarea>
 
-<div id="division" style="display: none;"
+<div id="division" class="example_configuration"
 >############
 #..........#
 #######v####
@@ -71,7 +55,7 @@ Speed: <input id="speed" type="range" min="0" max="200" value="0" />
 </div>
 
 
-<div id="fast-loop" style="display: none;"
+<div id="fast-loop" class="example_configuration"
 >#######
 # &lt; &lt; #
 # ### #
@@ -80,7 +64,7 @@ Speed: <input id="speed" type="range" min="0" max="200" value="0" />
 </div>
 
 
-<div id="freefill" style="display: none;"
+<div id="freefill" class="example_configuration"
 >######################
 #                    #
 #                    #
@@ -96,7 +80,7 @@ Speed: <input id="speed" type="range" min="0" max="200" value="0" />
 </div>
 
 
-<div id="heater" style="display: none;"
+<div id="heater" class="example_configuration"
 >     #########
      #! ! ! !#
 ###### ! ! ! ######
@@ -107,7 +91,7 @@ Speed: <input id="speed" type="range" min="0" max="200" value="0" />
 </div>
 
 
-<div id="magnetic-field" style="display: none;"
+<div id="magnetic-field" class="example_configuration"
 >######################
 #                    #
 #                    #
@@ -122,7 +106,7 @@ Speed: <input id="speed" type="range" min="0" max="200" value="0" />
 ######################</div>
 
 
-<div id="or-gate" style="display: none;"
+<div id="or-gate" class="example_configuration"
 >#####         #####
 #   ###########   #
 # . &gt;         &lt; . #
@@ -135,14 +119,14 @@ Speed: <input id="speed" type="range" min="0" max="200" value="0" />
 </div>
 
 
-<div id="pressure" style="display: none;"
+<div id="pressure" class="example_configuration"
 >#######################
 #..........&gt;          #
 #######################
 </div>
 
 
-<div id="slow-loop" style="display: none;"
+<div id="slow-loop" class="example_configuration"
 >#####################
 #        &lt;          #
 # ################# #
@@ -155,7 +139,7 @@ Speed: <input id="speed" type="range" min="0" max="200" value="0" />
 </div>
 
 
-<div id="subtraction" style="display: none;"
+<div id="subtraction" class="example_configuration"
 >###############
 #.............#
 #######v#######
@@ -165,7 +149,7 @@ Speed: <input id="speed" type="range" min="0" max="200" value="0" />
 </div>
 
 
-<div id="theory-of-time" style="display: none;"
+<div id="theory-of-time" class="example_configuration"
 >######################
 #..........          #
 #..........          #
@@ -181,7 +165,7 @@ Speed: <input id="speed" type="range" min="0" max="200" value="0" />
 </div>
 
 
-<div id="transistor" style="display: none;"
+<div id="transistor" class="example_configuration"
 >        ###
 ###     #+#
 #+#     # #
@@ -199,6 +183,7 @@ Speed: <input id="speed" type="range" min="0" max="200" value="0" />
 </body>
 <script src="../src/yoob/controller.js"></script>
 <script src="../src/yoob/playfield.js"></script>
+<script src="../src/yoob/preset-manager.js"></script>
 <script src="../src/worb.js"></script>
 <script>
   var canvas = document.getElementById('canvas');
@@ -213,12 +198,17 @@ Speed: <input id="speed" type="range" min="0" max="200" value="0" />
     'step': 'step',
     'load': 'load',
     'edit': 'edit',
+    'reset': 'reset',
     'speed': 'speed',
     'select': 'select_source',
     'source': cfg,
     'display': 'canvas_viewport'
   });
   worb.click_load();
+  e = (new yoob.PresetManager()).init({
+    selectElem: document.getElementById('select_source'),
+    controller: worb
+  }).populateFromClass('example_configuration');
 
   var loadLevel = 0;
   worb.onstep = function(underLoad) {
