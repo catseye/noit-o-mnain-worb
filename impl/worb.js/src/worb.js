@@ -41,8 +41,12 @@
 
 Bobule = function() {
     this.pressure = 1;
+    this.serial = 0;
 
-    this.move = function(pf, x, y) {
+    this.move = function(serial, pf, x, y) {
+        if (this.serial > serial)
+            return;
+
         this.pressure++;
 
         var newX = x + (Math.floor(Math.random() * 3) - 1);
@@ -63,6 +67,7 @@ Bobule = function() {
         pf.put(x, y, undefined);
         this.pressure = 1;
         pf.put(newX, newY, this);
+        this.serial = serial + 1;
     };
 
     this.draw = function(ctx, px, py, x, y, w, h) {
@@ -231,9 +236,12 @@ WorbPlayfield = function() {
      * This function ensures a particular order.
      */
     this.foreach = function(fun) {
-        /* TODO have less knowledge of the innards of yoob.Playfield */
-        for (var y = this.worldPf.minY; y <= this.worldPf.maxY; y++) {
-            for (var x = this.worldPf.minX; x <= this.worldPf.maxX; x++) {
+        var lowerY = this.getLowerY();
+        var upperY = this.getUpperY();
+        var lowerX = this.getLowerX();
+        var upperX = this.getUpperX();
+        for (var y = lowerY; y <= upperY; y++) {
+            for (var x = lowerX; x <= upperX; x++) {
                 var value = this.get(x, y);
                 if (value === undefined)
                     continue;
@@ -288,14 +296,23 @@ WorbPlayfield = function() {
 
 var proto = new yoob.Controller();
 WorbController = function() {
+    this.init = function(cfg) {
+        proto.init.apply(this, [cfg]);
+        this.pf = new WorbPlayfield().init({});
+        cfg.view.setPlayfield(this.pf);
+        this.view = cfg.view;
+        this.serial = 0;
+        return this;
+    };
+
     this.step = function() {
         var underLoad = false;
         var pf = this.pf;
-        this.view.draw();
-        pf.foreachBobule(function (x, y, elem) {
-            elem.move(pf, x, y);
+        var serial = this.serial;
+        pf.foreachBobule(function(x, y, elem) {
+            elem.move(serial, pf, x, y);
         });
-        pf.foreachWorld(function (x, y, elem) {
+        pf.foreachWorld(function(x, y, elem) {
             var b;
             if (elem instanceof Sink) {
                 b = pf.get(x, y);
@@ -317,20 +334,14 @@ WorbController = function() {
         if (this.onstep !== undefined) {
             this.onstep(underLoad);
         }
+        this.view.draw();
+        this.serial++;
     };
 
     this.reset = function(text) {
         this.pf.clear();
         this.pf.load(0, 0, text);
         this.view.draw();
-    };
-
-    this.init = function(cfg) {
-        proto.init.apply(this, [cfg]);
-        this.pf = new WorbPlayfield().init({});
-        cfg.view.setPlayfield(this.pf);
-        this.view = cfg.view;
-        return this;
     };
 };
 WorbController.prototype = proto;
