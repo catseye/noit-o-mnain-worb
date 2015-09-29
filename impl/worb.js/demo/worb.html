@@ -16,13 +16,7 @@
 
 <h1>noit o' mnain worb</h1>
 
-<button id="load">Load</button>
-<button id="edit">Edit</button>
-<button id="start">Start</button>
-<button id="stop">Stop</button>
-<button id="step">Step</button>
-<button id="reset">Reset</button>
-Speed: <input id="speed" type="range" min="0" max="200" value="0" />
+<div id="control_panel"></div>
 
 <div>
   configuration: <select id="select_source"></select>
@@ -37,8 +31,7 @@ Speed: <input id="speed" type="range" min="0" max="200" value="0" />
   </canvas>
 </div>
 
-<textarea id="configuration" rows="25" cols="40">
-</textarea>
+<textarea id="editor" rows="25" cols="40"></textarea>
 
 <div id="division" class="example_configuration"
 >############
@@ -183,40 +176,53 @@ Speed: <input id="speed" type="range" min="0" max="200" value="0" />
 </body>
 <script src="../src/yoob/controller.js"></script>
 <script src="../src/yoob/playfield.js"></script>
+<script src="../src/yoob/playfield-canvas-view.js"></script>
 <script src="../src/yoob/preset-manager.js"></script>
+<script src="../src/yoob/source-manager.js"></script>
 <script src="../src/worb.js"></script>
 <script>
   var canvas = document.getElementById('canvas');
   var cfg = document.getElementById('configuration');
   var loadIndicator = document.getElementById('load_indicator');
+  var controlPanel = document.getElementById('control_panel');
+  var display = document.getElementById('canvas_viewport');
 
-  var worb = new WorbController();
-  worb.init(canvas);
-  worb.connect({
-    'start': 'start',
-    'stop': 'stop',
-    'step': 'step',
-    'load': 'load',
-    'edit': 'edit',
-    'reset': 'reset',
-    'speed': 'speed',
-    'select': 'select_source',
-    'source': cfg,
-    'display': 'canvas_viewport'
+  var v = new yoob.PlayfieldCanvasView().init({
+      canvas: document.getElementById('canvas')
   });
-  worb.click_load();
-  e = (new yoob.PresetManager()).init({
-    selectElem: document.getElementById('select_source'),
-    controller: worb
-  }).populateFromClass('example_configuration').select('theory-of-time');
+  v.setCellDimensions(16, 16);
+
+  var controller = (new WorbController()).init({
+      panelContainer: controlPanel,
+      view: v
+  });
 
   var loadLevel = 0;
-  worb.onstep = function(underLoad) {
+  controller.onstep = function(underLoad) {
       if (underLoad) loadLevel += 60;
       loadLevel -= 10;
       if (loadLevel < 0) loadLevel = 0;
       if (loadLevel > 255) loadLevel = 255;
-      var l = 255-loadLevel;
+      var l = 255 - loadLevel;
       loadIndicator.style.background = "rgba(255, " + l + "," + l + ",1.0)";
   };
+
+  var sourceManager = (new yoob.SourceManager()).init({
+      panelContainer: controlPanel,
+      editor: document.getElementById('editor'),
+      hideDuringEdit: [display],
+      disableDuringEdit: [controller.panel],
+      storageKey: 'worb.js',
+      onDone: function() {
+          controller.performReset(this.getEditorText());
+      }
+  });
+
+  var presetManager = (new yoob.PresetManager()).init({
+    selectElem: document.getElementById('select_source'),
+    setPreset: function(id) {
+      sourceManager.loadSourceFromHTML(document.getElementById(id).innerHTML);
+    }
+  }).populateFromClass('example_configuration').select('theory-of-time');
+
 </script>

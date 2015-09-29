@@ -44,10 +44,10 @@ Bobule = function() {
 
     this.move = function(pf, x, y) {
         this.pressure++;
-  
+
         var newX = x + (Math.floor(Math.random() * 3) - 1);
         var newY = y + (Math.floor(Math.random() * 3) - 1);
-      
+
         var e = pf.get(newX, newY);
         if (e instanceof Bobule || e instanceof Wall) {
             return;
@@ -65,14 +65,14 @@ Bobule = function() {
         pf.put(newX, newY, this);
     };
 
-    this.draw = function(ctx, x, y, w, h) {
+    this.draw = function(ctx, px, py, x, y, w, h) {
         ctx.fillStyle = "rgba(0,0," + (255-(this.pressure * 25)) + ",1.0)";
         ctx.fillRect(x, y, w, h);
     };
 };
 
 Wall = function() {
-    this.draw = function(ctx, x, y, w, h) {
+    this.draw = function(ctx, px, py, x, y, w, h) {
         ctx.fillStyle = "brown";
         ctx.fillRect(x, y, w, h);
     };
@@ -84,7 +84,7 @@ Diode = function() {
         this.dy = dy;
     };
 
-    this.draw = function(ctx, x, y, w, h) {
+    this.draw = function(ctx, px, py, x, y, w, h) {
         ctx.fillStyle = "yellow";
         ctx.fillRect(x, y, w, h);
         ctx.beginPath();
@@ -112,21 +112,21 @@ Diode = function() {
 };
 
 Source = function() {
-    this.draw = function(ctx, x, y, w, h) {
+    this.draw = function(ctx, px, py, x, y, w, h) {
         ctx.fillStyle = "green";
         ctx.fillRect(x, y, w, h);
     };
 };
 
 Sink = function() {
-    this.draw = function(ctx, x, y, w, h) {
+    this.draw = function(ctx, px, py, x, y, w, h) {
         ctx.fillStyle = "red";
         ctx.fillRect(x, y, w, h);
     };
 };
 
 Load = function() {
-    this.draw = function(ctx, x, y, w, h) {
+    this.draw = function(ctx, px, py, x, y, w, h) {
         ctx.fillStyle = "cyan";
         ctx.fillRect(x, y, w, h);
     };
@@ -136,8 +136,12 @@ Load = function() {
  * Adapter on top of yoob.Playfield
  */
 WorbPlayfield = function() {
-    this.worldPf = new yoob.Playfield();
-    this.bobulePf = new yoob.Playfield();
+    this.init = function(cfg) {
+        this.worldPf = new yoob.Playfield().init({});
+        this.bobulePf = new yoob.Playfield().init({});
+        this.cursors = [];
+        return this;
+    };
 
     this.get = function(x, y) {
         var e = this.bobulePf.get(x, y);
@@ -256,26 +260,38 @@ WorbPlayfield = function() {
                            cellWidth, cellHeight);
         });
     };
-};
 
-WorbController = function() {
-    var canvas;
-    var ctx;
-    var cellWidth = 16;
-    var cellHeight = 16;
-
-    this.draw = function() {
-        canvas.width = this.pf.worldPf.getExtentX() * cellWidth;
-        canvas.height = this.pf.worldPf.getExtentY() * cellHeight;
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        this.pf.drawContext(ctx, 0, 0, cellWidth, cellHeight);
+    this.getLowerX = function() {
+        return this.worldPf.getLowerX();
     };
 
+    this.getUpperX = function() {
+        return this.worldPf.getUpperX();
+    };
+
+    this.getLowerY = function() {
+        return this.worldPf.getLowerY();
+    };
+
+    this.getUpperY = function() {
+        return this.worldPf.getUpperY();
+    };
+
+    this.getCursoredExtentX = function() {
+        return this.worldPf.getCursoredExtentX();
+    };
+
+    this.getCursoredExtentY = function() {
+        return this.worldPf.getCursoredExtentY();
+    };
+};
+
+var proto = new yoob.Controller();
+WorbController = function() {
     this.step = function() {
         var underLoad = false;
         var pf = this.pf;
-        this.draw();
+        this.view.draw();
         pf.foreachBobule(function (x, y, elem) {
             elem.move(pf, x, y);
         });
@@ -303,16 +319,18 @@ WorbController = function() {
         }
     };
 
-    this.load = function(text) {
+    this.reset = function(text) {
         this.pf.clear();
         this.pf.load(0, 0, text);
-        this.draw();
+        this.view.draw();
     };
 
-    this.init = function(c) {
-        canvas = c;
-        ctx = canvas.getContext('2d');
-        this.pf = new WorbPlayfield();
+    this.init = function(cfg) {
+        proto.init.apply(this, [cfg]);
+        this.pf = new WorbPlayfield().init({});
+        cfg.view.setPlayfield(this.pf);
+        this.view = cfg.view;
+        return this;
     };
 };
-WorbController.prototype = new yoob.Controller();
+WorbController.prototype = proto;
