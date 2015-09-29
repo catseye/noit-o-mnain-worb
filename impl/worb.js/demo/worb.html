@@ -181,8 +181,6 @@
 <script src="../src/yoob/source-manager.js"></script>
 <script src="../src/worb.js"></script>
 <script>
-  var canvas = document.getElementById('canvas');
-  var cfg = document.getElementById('configuration');
   var loadIndicator = document.getElementById('load_indicator');
   var controlPanel = document.getElementById('control_panel');
   var display = document.getElementById('canvas_viewport');
@@ -214,7 +212,8 @@
       disableDuringEdit: [controller.panel],
       storageKey: 'worb.js',
       onDone: function() {
-          controller.performReset(this.getEditorText());
+          controller.setResetState(this.getEditorText());
+          controller.clickReset();
       }
   });
 
