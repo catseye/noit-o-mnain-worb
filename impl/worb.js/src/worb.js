@@ -6,7 +6,7 @@
  */
 
 /*
- * Copyright (c)2013, Chris Pressey, Cat's Eye Technologies.
+ * Copyright (c)2013-2015, Chris Pressey, Cat's Eye Technologies.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without

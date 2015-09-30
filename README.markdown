@@ -1,8 +1,8 @@
 noit o' mnain worb
 ==================
 
-Language version 1.1. Distribution version 2013.0330.  
-Copyright ©2000-2013, Chris Pressey, Cat's Eye Technologies.  
+Language version 1.1. Distribution version 2015.0930.  
+Copyright ©2000-2015, Chris Pressey, Cat's Eye Technologies.  
 All rights reserved.
 
 What is this?
@@ -102,7 +102,7 @@ BEL character when this happens. On most terminals, this affects a
 beeping sound.]
 
 The idea is that the bobules, spaces, walls, and diodes alone constitute
-a (nearly) Turing-Complete system.
+a (nearly) Turing-Complete system¹.
 
 I say "nearly" because it's actually missing a dimension in this form.
 The noit o' mnain worb language isn't dimensionally-independent.
@@ -122,3 +122,8 @@ theorem.]
 So, it really only works in three dimensions and above. For that reason,
 adding 'wormholes' to the noit o' mnain worb playfield is a possible
 future extension, to simulate three dimensions a la 'wire crossing'.
+
+- - - -
+
+¹given a playfield which is initially populated with a suitable infinite
+pattern, of course, à la Wireworld and such.
