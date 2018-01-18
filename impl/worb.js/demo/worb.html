@@ -33,60 +33,8 @@
 <textarea id="editor" rows="25" cols="40"></textarea>
 
 </body>
-<script src="../src/yoob/controller.js"></script>
-<script src="../src/yoob/playfield.js"></script>
-<script src="../src/yoob/playfield-canvas-view.js"></script>
-<script src="../src/yoob/preset-manager.js"></script>
-<script src="../src/yoob/source-manager.js"></script>
-<script src="../src/worb.js"></script>
 <script src="../../../eg/index.js"></script>
+<script src="../src/worb-launcher.js"></script>
 <script>
-  var loadIndicator = document.getElementById('load_indicator');
-  var controlPanel = document.getElementById('control_panel');
-  var display = document.getElementById('canvas_viewport');
-
-  var v = new yoob.PlayfieldCanvasView().init({
-      canvas: document.getElementById('canvas')
-  });
-  v.setCellDimensions(16, 16);
-
-  var controller = (new WorbController()).init({
-      panelContainer: controlPanel,
-      view: v
-  });
-
-  var loadLevel = 0;
-  controller.onstep = function(underLoad) {
-      if (underLoad) loadLevel += 60;
-      loadLevel -= 10;
-      if (loadLevel < 0) loadLevel = 0;
-      if (loadLevel > 255) loadLevel = 255;
-      var l = 255 - loadLevel;
-      loadIndicator.style.background = "rgba(255, " + l + "," + l + ",1.0)";
-  };
-
-  var sourceManager = (new yoob.SourceManager()).init({
-      panelContainer: controlPanel,
-      editor: document.getElementById('editor'),
-      hideDuringEdit: [display],
-      disableDuringEdit: [controller.panel],
-      storageKey: 'worb.js',
-      onDone: function() {
-          controller.setResetState(this.getEditorText());
-          controller.clickReset();
-      }
-  });
-
-  var presetManager = (new yoob.PresetManager()).init({
-    selectElem: document.getElementById('select_source'),
-  });
-  function makeCallback(sourceText) {
-    return function(id) {
-      sourceManager.loadSource(sourceText);
-    }
-  }
-  for (var i = 0; i < examplePrograms.length; i++) {
-    presetManager.add(examplePrograms[i][0], makeCallback(examplePrograms[i][1]));
-  }
-  presetManager.select(examplePrograms[0][0]);
+  launch('../src/', 'container', {});
 </script>
