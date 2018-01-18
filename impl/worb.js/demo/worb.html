@@ -9,7 +9,6 @@
     display: inline-block;
 }
 #load_indicator { border: 1px solid purple; }
-.example_configuration { display: none; }
   </style>
 </head>
 <body>
@@ -33,146 +32,6 @@
 
 <textarea id="editor" rows="25" cols="40"></textarea>
 
-<div id="division" class="example_configuration"
->############
-#..........#
-#######v####
-      #    #
-      #v####
-      #    #
-      #v####
-      #    #
-      #v####
-      #    #
-      ######
-</div>
-
-
-<div id="fast-loop" class="example_configuration"
->#######
-# &lt; &lt; #
-# ### #
-# &gt;.&gt; #
-#######
-</div>
-
-
-<div id="freefill" class="example_configuration"
->######################
-#                    #
-#                    #
-#                    #
-#                    #
-#                    #
-#         +          #
-#                    #
-#                    #
-#                    #
-#                    #
-######################
-</div>
-
-
-<div id="heater" class="example_configuration"
->     #########
-     #! ! ! !#
-###### ! ! ! ######
-#+    ! ! ! !    -#
-###### ! ! ! ######
-     #! ! ! !#
-     #########
-</div>
-
-
-<div id="magnetic-field" class="example_configuration"
->######################
-#                    #
-#                    #
-#                    #
-#        ---         #
-#        ---         #
-#        +++         #
-#        +++         #
-#                    #
-#                    #
-#                    #
-######################</div>
-
-
-<div id="or-gate" class="example_configuration"
->#####         #####
-#   ###########   #
-# . &gt;         &lt; . #
-#   #####v#####   #
-#####   #  ########
-        #       &gt;!#
-        #v#########
-        # #
-        ###
-</div>
-
-
-<div id="pressure" class="example_configuration"
->#######################
-#..........&gt;          #
-#######################
-</div>
-
-
-<div id="slow-loop" class="example_configuration"
->#####################
-#        &lt;          #
-# ################# #
-# #               # #
-# #               #.#
-# #               # #
-# ################# #
-#         &gt;         #
-#####################
-</div>
-
-
-<div id="subtraction" class="example_configuration"
->###############
-#.............#
-#######v#######
-      #       #
-      #########
-
-</div>
-
-
-<div id="theory-of-time" class="example_configuration"
->######################
-#..........          #
-#..........          #
-#..........          #
-#..........          #
-#..........          #
-#..........          #
-#..........          #
-#..........          #
-#..........          #
-#..........          #
-######################
-</div>
-
-
-<div id="transistor" class="example_configuration"
->        ###
-###     #+#
-#+#     # #
-# #######v#
-#       &lt; #
-###     &lt; #
-  #     &lt; #
-  #######v#
-        # #
-        #!#
-        #-#
-        ###</div>
-
-
 </body>
 <script src="../src/yoob/controller.js"></script>
 <script src="../src/yoob/playfield.js"></script>
@@ -180,6 +39,7 @@
 <script src="../src/yoob/preset-manager.js"></script>
 <script src="../src/yoob/source-manager.js"></script>
 <script src="../src/worb.js"></script>
+<script src="../../../eg/index.js"></script>
 <script>
   var loadIndicator = document.getElementById('load_indicator');
   var controlPanel = document.getElementById('control_panel');
@@ -219,9 +79,14 @@
 
   var presetManager = (new yoob.PresetManager()).init({
     selectElem: document.getElementById('select_source'),
-    setPreset: function(id) {
-      sourceManager.loadSourceFromHTML(document.getElementById(id).innerHTML);
+  });
+  function makeCallback(sourceText) {
+    return function(id) {
+      sourceManager.loadSource(sourceText);
     }
-  }).populateFromClass('example_configuration').select('theory-of-time');
-
+  }
+  for (var i = 0; i < examplePrograms.length; i++) {
+    presetManager.add(examplePrograms[i][0], makeCallback(examplePrograms[i][1]));
+  }
+  presetManager.select(examplePrograms[0][0]);
 </script>
