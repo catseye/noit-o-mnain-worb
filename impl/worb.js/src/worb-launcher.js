@@ -4,6 +4,7 @@ function launch(prefix, container, config) {
   }
   config = config || {};
   var deps = [
+    "yoob/element-factory.js",
     "yoob/controller.js",
     "yoob/playfield.js",
     "yoob/playfield-canvas-view.js",
@@ -14,19 +15,20 @@ function launch(prefix, container, config) {
   var loaded = 0;
   var onload = function() {
     if (++loaded < deps.length) return;
-    //document.getElementById('installation').innerHTML =
-    //  '<div id="control_panel"></div>' +
-    //  '<span id="load_indicator">load indicator</span>' +
-    //  '<div>example source: <select id="select_source"></select></div>' +
-    //  '<div id="animation_container"><canvas id="canvas" width="400" height="400"></canvas></div>' +
-    //  '<textarea id="editor" rows="25" cols="40"></textarea>';
 
-    var loadIndicator = document.getElementById('load_indicator');
-    var controlPanel = document.getElementById('control_panel');
-    var display = document.getElementById('canvas_viewport');
+    var controlPanel = yoob.makeDiv(container);
+    controlPanel.id = 'control_panel';
+    var subPanel = yoob.makeDiv(container);
+    var selectSource = yoob.makeSelect(subPanel, 'configuration:', []);
+    var loadIndicator = yoob.makeSpan(subPanel, "load indicator");
+    loadIndicator.id = 'load_indicator';
+    var canvasViewport = yoob.makeDiv(container);
+    canvasViewport.id = 'canvas_viewport';
+    var canvas = yoob.makeCanvas(canvasViewport, 400, 400);
+    var editor = yoob.makeTextArea(container, 40, 25);
 
     var v = new yoob.PlayfieldCanvasView().init({
-        canvas: document.getElementById('canvas')
+        canvas: canvas
     });
     v.setCellDimensions(16, 16);
 
@@ -47,8 +49,8 @@ function launch(prefix, container, config) {
 
     var sourceManager = (new yoob.SourceManager()).init({
         panelContainer: controlPanel,
-        editor: document.getElementById('editor'),
-        hideDuringEdit: [display],
+        editor: editor,
+        hideDuringEdit: [canvasViewport],
         disableDuringEdit: [controller.panel],
         storageKey: 'worb.js',
         onDone: function() {
@@ -58,7 +60,7 @@ function launch(prefix, container, config) {
     });
 
     var presetManager = (new yoob.PresetManager()).init({
-      selectElem: document.getElementById('select_source'),
+      selectElem: selectSource,
     });
     function makeCallback(sourceText) {
       return function(id) {
