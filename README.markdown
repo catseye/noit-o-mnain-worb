@@ -1,8 +1,8 @@
 noit o' mnain worb
 ==================
 
-Language version 1.1. Distribution version 2015.0930.  
-Copyright ©2000-2015, Chris Pressey, Cat's Eye Technologies.  
+Language version 1.1. Distribution version 2018.0123.  
+Copyright ©2000-2018, Chris Pressey, Cat's Eye Technologies.  
 All rights reserved.
 
 What is this?
