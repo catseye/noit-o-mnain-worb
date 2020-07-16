@@ -1,6 +1,12 @@
 noit o' mnain worb
 ==================
 
+_Try it online_ [@ catseye.tc](https://catseye.tc/installation/noit_o&#39;_mnain_worb)
+| _See also:_ [Cyclobots](https://github.com/catseye/Cyclobots#readme)
+∘ [Chzrxl](https://github.com/catseye/Chzrxl#readme)
+
+![screenshot](https://static.catseye.tc/images/screenshots/noit_o_mnain_worb.jpg)
+
 Language version 1.1. Distribution version 2018.0123.  
 Copyright ©2000-2018, Chris Pressey, Cat's Eye Technologies.  
 All rights reserved.
@@ -9,8 +15,8 @@ What is this?
 -------------
 
 This is the reference distribution of *noit o' mnain worb*, a
-probabilistic particle automaton described (awkwardly) in the next
-section.
+probabilistic particle automaton devised in the year 2000 and
+described (awkwardly) in the next section.
 
 It contains the reference implementation, as a Perl script which
 uses the (included) Console::Virtual library, in the `script`
