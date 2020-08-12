@@ -2,8 +2,11 @@ noit o' mnain worb
 ==================
 
 _Try it online_ [@ catseye.tc](https://catseye.tc/installation/noit_o&#39;_mnain_worb)
+| _Wiki entry_ [@ esolangs.org](https://esolangs.org/wiki/noit_o&#39;_mnain_worb)
 | _See also:_ [Cyclobots](https://github.com/catseye/Cyclobots#readme)
 ∘ [Chzrxl](https://github.com/catseye/Chzrxl#readme)
+∘ [RUBE](https://github.com/catseye/RUBE#readme)
+∘ [REDGREEN](https://github.com/catseye/REDGREEN#readme)
 
 ![screenshot](https://static.catseye.tc/images/screenshots/noit_o_mnain_worb.jpg)
 
