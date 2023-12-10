@@ -3,10 +3,10 @@ noit o' mnain worb
 
 _Try it online_ [@ catseye.tc](https://catseye.tc/installation/noit_o&#39;_mnain_worb)
 | _Wiki entry_ [@ esolangs.org](https://esolangs.org/wiki/noit_o&#39;_mnain_worb)
-| _See also:_ [Cyclobots](https://github.com/catseye/Cyclobots#readme)
-∘ [Chzrxl](https://github.com/catseye/Chzrxl#readme)
-∘ [RUBE](https://github.com/catseye/RUBE#readme)
-∘ [REDGREEN](https://github.com/catseye/REDGREEN#readme)
+| _See also:_ [Cyclobots](https://codeberg.org/catseye/Cyclobots#readme)
+∘ [Chzrxl](https://codeberg.org/catseye/Chzrxl#readme)
+∘ [RUBE](https://codeberg.org/catseye/RUBE#readme)
+∘ [REDGREEN](https://codeberg.org/catseye/REDGREEN#readme)
 
 ![screenshot](https://static.catseye.tc/images/screenshots/noit_o_mnain_worb.jpg)
 
@@ -26,12 +26,12 @@ uses the (included) Console::Virtual library, in the `script`
 directory.
 
 It also contains an implementation in Javascript/HTML5, using
-modules (also included) from [yoob.js](https://github.com/catseye/yoob.js),
+modules (also included) from [yoob.js](https://catseye.tc/node/yoob.js),
 in the `impl/worb.js` directory.
 
 It used to contain, but no longer contains, an implementation in Java.
 This implementation can now be found in
-[the yoob distribution](https://github.com/catseye/yoob).
+[the yoob distribution](https://catseye.tc/distribution/yoob_distribution).
 
 What is noit o' mnain worb?
 ---------------------------
